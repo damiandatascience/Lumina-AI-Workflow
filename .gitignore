@@ -1,0 +1,52 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Local development files
+.env
+
+# Tooling cache
+.ruff_cache/
+.mypy_cache/
+
+# Project-specific ignores
+explicacion/
+M2/
+
+# Log files and directories
+# Ignore all .log files
+*.log
+# Ignore the project's specific log output directory
+outputs/logs/
+
+# IDE configuration files
+.vscode/
+.idea/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Testing-related files
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+.tox/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Local databases
+*.sqlite3
+*.db
