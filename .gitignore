@@ -47,6 +47,8 @@ coverage.xml
 # Jupyter Notebooks
 .ipynb_checkpoints/
 
-# Local databases
-*.sqlite3
-*.db
+# Notebook outputs and execution data
+# These patterns prevent committing notebook outputs with local paths
+*.ipynb
+!*-template.ipynb
+!examples/*.ipynb
