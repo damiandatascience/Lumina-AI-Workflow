@@ -87,67 +87,154 @@ graph LR
 
 El proyecto incluye un **notebook Jupyter completamente funcional** que implementa un pipeline ETL automatizado para análisis de datos. Para información detallada sobre configuración y uso, consulta [docs/notebook-etl.md](docs/notebook-etl.md).
 
-## 🏗️ Arquitectura del Sistema
+## 📋 Diagramas de Flujo del Sistema
+
+El proyecto cuenta con diagramas de flujo detallados para cada componente principal, lo que facilita la comprensión del funcionamiento interno del sistema:
+
+- [Arquitectura General del Proyecto](docs/arquitectura-proyecto.md) - Visión completa de la arquitectura y relaciones entre componentes
+- [Flujo del Main](docs/main-workflow.md) - Diagrama de flujo del orquestador principal
+- [Flujo del API](docs/api-workflow.md) - Procesamiento de solicitudes en la API REST
+- [Flujo de Data Processing](docs/data-processing-workflow.md) - Transformación y preparación de datos
+- [Flujo del Generator](docs/generator-workflow.md) - Generación de código Python
+- [Flujo del Executor](docs/executor-workflow.md) - Ejecución de código y generación de visualizaciones
+- [Flujo del Reflector](docs/reflector-workflow.md) - Análisis y refinamiento de resultados
+- [Flujo de la Interfaz](docs/interface-workflow.md) - Interacción con el usuario a través de Gradio
+
+### Funciones de Utilidades
+
+También se incluyen diagramas de flujo para las funciones principales del módulo `utils.py`:
+
+- [get_response](docs/utils-get-response.md) - Comunicación con la API de OpenAI para generación de texto
+- [image_openai_call](docs/utils-image-openai-call.md) - Análisis de imágenes con modelos de visión de OpenAI
+- [encode_image_b64](docs/utils-encode-image-b64.md) - Codificación de imágenes a Base64
+- [ensure_execute_python_tags](docs/utils-ensure-execute-python-tags.md) - Aseguramiento de etiquetas de ejecución de código
+- [make_schema_text](docs/utils-make-schema-text.md) - Generación de esquemas de DataFrames
+- [parse_reflector_response](docs/utils-parse-reflector-response.md) - Procesamiento de respuestas del reflector
+
+# 🏗️ Arquitectura del Proyecto
+
+## Diagrama de Arquitectura General
 
 ```mermaid
 graph TB
     subgraph "Capa de Presentación"
-        A[🌐 Interfaz Gradio<br/>interface.py]
-        B[🔌 API FastAPI<br/>api.py]
+        UI[Interfaz de Usuario]
     end
     
-    subgraph "Capa de Aplicación y Workflow"
-        C[⚙️ AI Workflow Principal<br/>main.py]
-        E[🎨 Generador<br/>generator.py]
-        F[⚡ Ejecutor V1<br/>executor.py]
-        G[🔍 Reflector<br/>reflector.py]
-        H[⚡ Ejecutor V2<br/>executor.py]
+    subgraph "Capa de Control"
+        MAIN[src/main.py]
+        INTERFACE[src/interface.py]
     end
     
-    subgraph "Capa de Datos y Configuración"
-        D[📋 Config Manager<br/>config.py]
-        I[📊 Data Processing<br/>data_processing.py]
-        J[💾 Fuentes de Datos<br/>MongoDB/CSV]
-        K[🛠️ Utilidades<br/>utils.py]
+    subgraph "Capa de Procesamiento"
+        GENERATOR[src/generator.py]
+        EXECUTOR[src/executor.py]
+        REFLECTOR[src/reflector.py]
+        DATA_PROCESSING[src/data_processing.py]
+    end
+    
+    subgraph "Capa de Servicios Externos"
+        OPENAI[API de OpenAI]
+        DATA[data/]
+    end
+    
+    subgraph "Capa de Utilidades"
+        UTILS[src/utils.py]
+        CONFIG[src/config.py]
+        API[src/api.py]
     end
     
     subgraph "Capa de Almacenamiento"
-        L[📈 Gráficos Generados<br/>outputs/charts/]
-        M[📝 Logs<br/>outputs/logs/]
+        OUTPUTS[outputs/]
+        NOTEBOOK[notebook/]
     end
     
-    %% --- Flujo Principal del Workflow (Flechas Gruesas) ---
-    A ==> B;
-    B ==> C;
-    C ==> E;
-    E ==> F;
-    F ==> G;
-    G ==> H;
-    H ==> L;
+    UI --> MAIN
+    MAIN --> INTERFACE
+    INTERFACE --> GENERATOR
+    GENERATOR --> EXECUTOR
+    EXECUTOR --> REFLECTOR
+    REFLECTOR --> GENERATOR
     
-    %% --- Conexiones de Soporte (Flechas Punteadas) ---
-    C -.-> D;
-    C -.-> M;
-    E -.-> K;
-    F -.-> K;
-    G -.-> K;
-    H -.-> K;
-    F -.-> M;
-    H -.-> M;
-    K -.-> I;
-    I -.-> J;
+    GENERATOR --> UTILS
+    EXECUTOR --> UTILS
+    REFLECTOR --> UTILS
     
-    %% --- Estilos y Colores ---
-    classDef presentation fill:#D6EAF8,stroke:#3498DB,stroke-width:2px,color:#212F3D
-    classDef workflow fill:#D1F2EB,stroke:#1ABC9C,stroke-width:2px,color:#145A32
-    classDef data fill:#FEF9E7,stroke:#F1C40F,stroke-width:2px,color:#785902
-    classDef storage fill:#F2F3F4,stroke:#99A3A4,stroke-width:2px,color:#34495E
+    UTILS --> OPENAI
+    UTILS --> CONFIG
+    UTILS --> API
     
-    class A,B presentation
-    class C,E,F,G,H workflow
-    class D,I,J,K data
-    class L,M storage
+    DATA_PROCESSING --> DATA
+    GENERATOR --> DATA_PROCESSING
+    
+    EXECUTOR --> OUTPUTS
+    OUTPUTS --> NOTEBOOK
 ```
+
+## Descripción de Componentes
+
+### Capa de Presentación
+- **Interfaz de Usuario**: Punto de entrada para la interacción con el sistema.
+
+### Capa de Control
+- **main.py**: Orquestador principal del sistema, coordina el flujo de trabajo entre los diferentes componentes.
+- **interface.py**: Maneja la interfaz de comunicación entre el usuario y el sistema.
+
+### Capa de Procesamiento
+- **generator.py**: Generador de código y soluciones basado en los requisitos y datos de entrada.
+- **executor.py**: Ejecutor del código generado, responsable de ejecutar las operaciones y generar resultados.
+- **reflector.py**: Analizador y refinador de resultados, proporciona feedback y mejora las soluciones generadas.
+- **data_processing.py**: Módulo especializado en el procesamiento y transformación de datos.
+
+### Capa de Servicios Externos
+- **API de OpenAI**: Servicio externo utilizado para generación de texto y análisis de imágenes.
+- **data/**: Directorio que contiene los datasets de entrada para el procesamiento.
+
+### Capa de Utilidades
+- **utils.py**: Módulo de utilidades que proporciona herramientas esenciales para la integración con APIs, manejo de datos y procesamiento de contenido.
+- **config.py**: Módulo de configuración del sistema.
+- **api.py**: Módulo que maneja las interacciones con APIs externas.
+
+### Capa de Almacenamiento
+- **outputs/**: Directorio que almacena los resultados generados por el sistema.
+- **notebook/**: Directorio que contiene notebooks para análisis y documentación.
+
+## Flujo de Trabajo Principal
+
+1. **Inicio**: El usuario interactúa con el sistema a través de la interfaz de usuario.
+2. **Coordinación**: El módulo `main.py` coordina el flujo de trabajo, iniciando el proceso a través de `interface.py`.
+3. **Generación**: El `generator.py` utiliza los datos de entrada y las utilidades para generar soluciones iniciales.
+4. **Ejecución**: El `executor.py` ejecuta el código generado, produciendo resultados.
+5. **Reflexión**: El `reflector.py` analiza los resultados y proporciona feedback para mejorar las soluciones.
+6. **Iteración**: El proceso se repite con el feedback del reflector para mejorar las soluciones generadas.
+7. **Almacenamiento**: Los resultados finales se almacenan en el directorio `outputs/`.
+
+## Integración con Servicios Externos
+
+- **OpenAI API**: El sistema se integra con la API de OpenAI a través del módulo `utils.py` para:
+  - Generación de texto mediante la función `get_response()`
+  - Análisis de imágenes mediante la función `image_openai_call()`
+  
+- **Procesamiento de Datos**: El sistema procesa datasets almacenados en el directorio `data/` mediante el módulo `data_processing.py`.
+
+## Dependencias entre Componentes
+
+- **utils.py**: Es un módulo central utilizado por casi todos los demás componentes, proporcionando funcionalidades esenciales como:
+  - Codificación/decodificación de imágenes
+  - Comunicación con APIs
+  - Procesamiento de texto
+  - Manejo de datos
+
+- **generator.py**, **executor.py**, **reflector.py**: Forman un ciclo iterativo de generación-ejecución-reflexión que permite mejorar continuamente las soluciones.
+
+- **main.py**: Actúa como orquestador, coordinando la interacción entre todos los componentes.
+
+## Patrones de Diseño Utilizados
+
+1. **Patrón de Iteración Refinada**: El sistema sigue un ciclo de generación-ejecución-reflexión para mejorar continuamente las soluciones.
+2. **Patrón de Modularidad**: Cada componente tiene una responsabilidad única y bien definida.
+3. **Patrón de Inyección de Dependencias**: Los componentes utilizan utilidades y servicios externos a través de interfaces bien definidas.
+4. **Patrón de Pipeline**: El flujo de trabajo sigue una estructura de pipeline donde cada etapa procesa y pasa datos a la siguiente.
 
 ## 🏆 Principios de Diseño de Software
 
@@ -189,7 +276,7 @@ Este proyecto no solo es un sistema de IA funcional, sino también una demostrac
 - **Tolerante a Fallos**: Si V2 falla, se puede continuar con V1
 - **Auditable**: Cada paso registra su progreso
 
-## 🛠️ Instalación y Configuración
+## ️ Instalación y Configuración
 
 ### Requisitos Previos
 - Python 3.12+
