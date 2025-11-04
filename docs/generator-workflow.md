@@ -1,4 +1,3 @@
-
 ## Flujo del Generator
 
 ```mermaid
