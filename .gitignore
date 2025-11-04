@@ -28,6 +28,8 @@ M2/
 *.log
 # Ignore the project's specific log output directory
 outputs/logs/
+# Ignore generated charts
+outputs/charts/
 
 # IDE configuration files
 .vscode/
@@ -48,7 +50,3 @@ coverage.xml
 .ipynb_checkpoints/
 
 # Notebook outputs and execution data
-# These patterns prevent committing notebook outputs with local paths
-*.ipynb
-!*-template.ipynb
-!examples/*.ipynb
