@@ -16,6 +16,7 @@
 
 - [Características Principales](#-características-principales)
   - [Flujo del AI Workflow Detallado](#-flujo-del-ai-workflow-detallado)
+- [📊 Análisis ETL y Visualización de Datos](#-análisis-etl-y-visualización-de-datos)
 - [Arquitectura del Sistema](#-arquitectura-del-sistema)
 - [Principios de Diseño de Software](#-principios-de-diseño-de-software)
 - [Instalación y Configuración](#-instalación-y-configuración)
@@ -40,7 +41,6 @@
 ##  Contexto: AI Workflow vs Sistema de Agentes
 
 
-
 Este proyecto implementa un **AI Workflow** (Agentic Workflow), no un sistema de agentes múltiples. La diferencia es fundamental: 
 
 - **Sistema de Agentes**: Componentes autónomos que toman decisiones independientes
@@ -62,9 +62,7 @@ graph LR
 ```
 
 
-
 ---
-
 
 ### 🌍 Interfaces Múltiples
 
@@ -84,6 +82,10 @@ graph LR
 - Refinamiento basado en análisis visual del workflow
 - Feedback detallado en español
 - Guardado automático en alta resolución (300 DPI)
+
+## 📊 Análisis ETL y Visualización de Datos
+
+El proyecto incluye un **notebook Jupyter completamente funcional** que implementa un pipeline ETL automatizado para análisis de datos. Para información detallada sobre configuración y uso, consulta [docs/notebook-etl.md](docs/notebook-etl.md).
 
 ## 🏗️ Arquitectura del Sistema
 
@@ -418,7 +420,7 @@ lumina/
 ├── outputs/                # Resultados generados
 ├── docs/                   # Documentación adicional
 │   ├── logging.md          # Detalles sobre la configuración y uso del logging
-│   └── images/             # Contiene imágenes de la documentación (ej. diagramas)
+│   └── notebook-etl.md     # Guía completa del notebook ETL
 └── ... (otros archivos de configuración y entorno)
 ```
 
