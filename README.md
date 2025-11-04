@@ -276,7 +276,7 @@ Este proyecto no solo es un sistema de IA funcional, sino también una demostrac
 - **Tolerante a Fallos**: Si V2 falla, se puede continuar con V1
 - **Auditable**: Cada paso registra su progreso
 
-## ️ Instalación y Configuración
+## 🛠️ Instalación y Configuración
 
 ### Requisitos Previos
 - Python 3.12+
