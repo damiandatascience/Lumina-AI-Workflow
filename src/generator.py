@@ -61,7 +61,7 @@ def generate_chart_code(
 
     Return ONLY the code wrapped in <execute_python> tags.
     """
-    logger.debug(f"Lumina Generator: Sending prompt to LLM.")
+    logger.debug("Lumina Generator: Sending prompt to LLM.")
 
     response = utils.get_response(model, prompt)
     logger.debug("Lumina Generator: Received response from LLM.")
