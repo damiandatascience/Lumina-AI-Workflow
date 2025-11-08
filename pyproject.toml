@@ -23,6 +23,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     # Development tools (not critical for running the application)
+    "pytest>=9.0.0",
 ]
 
 
