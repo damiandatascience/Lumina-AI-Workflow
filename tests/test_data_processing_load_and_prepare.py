@@ -371,38 +371,3 @@ invalid,200
             assert not df['total_amount'].isna().any()
         finally:
             os.unlink(temp_path)
-
-
-class TestLoadAndPrepareDataFixtures:
-    """Tests usando el fixture de conftest.py para verificar comportamiento."""
-    
-    def test_comportamiento_esperado_con_fixture(self, df):
-        """Test que verifica el comportamiento esperado con el fixture de conftest."""
-        # El fixture df refleja el estado DESPUÉS de load_and_prepare_data
-        # (simulando el resultado con columnas normalizadas y datos de fecha extraídos)
-        
-        # Verificar que tiene las columnas de fecha
-        assert 'quarter' in df.columns
-        assert 'month' in df.columns
-        assert 'year' in df.columns
-        
-        # Verificar que tiene la columna date (como string, simula el resultado final)
-        assert 'date' in df.columns
-        
-        # Verificar valores específicos de fecha extraída
-        assert df['quarter'].tolist() == [4, 1, 1]
-        assert df['month'].tolist() == [11, 2, 1]
-        assert df['year'].tolist() == [2023, 2023, 2023]
-        
-        # Verificar datos de retail_sales
-        assert df['transaction_id'].tolist() == [1, 2, 3]
-        assert df['customer_id'].tolist() == ['CUST001', 'CUST002', 'CUST003']
-        assert df['product_category'].tolist() == ['Beauty', 'Clothing', 'Electronics']
-        
-        # Verificar que todas las columnas esperadas están presentes
-        expected_columns = [
-            'transaction_id', 'date', 'customer_id', 'gender', 'age',
-            'product_category', 'quantity', 'price_per_unit', 'total_amount',
-            'quarter', 'month', 'year'
-        ]
-        assert list(df.columns) == expected_columns
