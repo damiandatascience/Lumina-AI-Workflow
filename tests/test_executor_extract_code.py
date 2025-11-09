@@ -26,11 +26,11 @@ def test_extract_code_sin_tags_retorna_none():
 # ---------- Tests para _execute_code ----------
 
 def test_execute_code_exito_modifica_df(df):
-    code = "df['b'] = df['a'] * 2"
+    code = "df['b'] = df['age'] * 2"
     ok = _execute_code(code, df)
     assert ok is True
     assert 'b' in df.columns
-    assert df['b'].tolist() == [2, 4, 6]
+    assert df['b'].tolist() == [68, 52, 100]
 
 def test_execute_code_error_retorna_false(df):
     # Falla inmediatamente (NameError) y no modifica df
@@ -45,12 +45,12 @@ def test_extract_and_execute_exito(df):
     txt = """
     Texto del LLM...
     <execute_python>
-    df['b'] = df['a'] + 10
+    df['b'] = df['age'] + 10
     </execute_python>
     """
     ok = extract_and_execute_code(txt, df)
     assert ok is True
-    assert df['b'].tolist() == [11, 12, 13]
+    assert df['b'].tolist() == [44, 36, 60]
 
 def test_extract_and_execute_sin_tags(df):
     txt = "No hay código aquí"
