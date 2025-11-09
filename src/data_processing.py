@@ -64,6 +64,7 @@ def load_configured_data() -> pd.DataFrame | None:
 def load_and_prepare_data(csv_path: str) -> pd.DataFrame:
     """
     Carga datos desde un archivo CSV y los prepara para el análisis.
+    Normaliza nombre de columnas a minusculas y elimina espacios.
 
     Si existe una columna 'date', la convierte a formato datetime y extrae
     automáticamente 'quarter', 'month' y 'year' en nuevas columnas para
@@ -76,6 +77,10 @@ def load_and_prepare_data(csv_path: str) -> pd.DataFrame:
         Un DataFrame de pandas con los datos cargados y procesados.
     """
     df = pd.read_csv(csv_path)
+    
+    # Normalizar todas la columnas 
+    df.columns = df.columns.str.lower().str.strip()
+
     # Procesa la columna 'date' solo si existe
     if "date" in df.columns:
         df["date"] = pd.to_datetime(df["date"], errors="coerce")
